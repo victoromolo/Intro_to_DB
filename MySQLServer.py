@@ -3,6 +3,7 @@ from mysql.connector import Error
 
 def create_database(host_name, user_name, user_password):
     connection = None
+    cursor = None
     try:
         connection = mysql.connector.connect(
             host=host_name,
@@ -16,10 +17,14 @@ def create_database(host_name, user_name, user_password):
     except Error as e:
         print(f"Error while connecting to MySQL: {e}")
     finally:
-        if connection is not None and connection.is_connected():
+        if cursor:
             cursor.close()
+        if connection and connection.is_connected():
             connection.close()
             print("MySQL connection is closed")
 
 if __name__ == "__main__":
-    create_database("localhost", "root", "victor2024")
+    try:
+        create_database("localhost", "root", "victor2024")
+    except Exception as e:
+        print(f"An error occurred: {e}")
